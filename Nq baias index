@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NQ Bias</title>
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0AQMAAAAHA5RxAAAABlBMVEU93IQOERaeLqXDAAAB90lEQVR42u2WMW7cMBBFH2khVmEgKlIGgZKLWD6ZdJTcJEQuEvoGDOBCDhSOC4kUVxoWbhOpWexb7vD/meFQRtCe3xb9ufjF/3nudf466LzV4zzTa/y11/dtdT3Pus6/PaDosRVfpuZ3qvBh+5TD4wGRcFrfVeK0Fd5UuF21nrip1WvSuQw6j991X3PHneZrDu/rn1DhfrV84q6SZ5juFT2CGbT4Eav21QKd3p9Nq62faRuNBzqrcU9vOoU7hrUyJ1siv0SCub13xJqo3Tuxmmer8qXSV3OlD0Olbz29yl06Fwf9BnnPvSmV8xjP5/fnja09n4wiEvi4fst9IrjSVo4T8aWtzBdCaSvzmZdD46Xjb7Yq3u7rkdJWjuNgKmzlPwKPMnN/iCOA36uV40QgFLYSX4AZf8rzDPyBbDfxwANS2E16HF9g3LOb9Di+wo/dVloB48Rn7vL6lUcQR5ttpTgRQ1/a2vQs2N1SwWcaHvahmnmgxZa2Nu7pMMXQTjonHkWm4hBuOmEUcZgDjyAifre16Y8YoNubcNt3we4TvuAzDfCh/MUm+WBKyzbJB6b+wN1qdHCHPoTxMFaCERCLaO+xsaxfEX9RpqLN8s+8vbWaeXOoYeK2qFPJTVmn0td0vAS2/D9V5sm3Cv9U4e31vnfxi1/8/+FvEEt54yOSpNQAAAAASUVORK5CYII=">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="NQ Bias">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0e1116">
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--tx:#14181f;--mu:#667085;--bd:#e3e6eb;--up:#0f9d58;--dn:#d93025;--nu:#8a8f98;color-scheme:light}
+@media (prefers-color-scheme:dark){:root{--bg:#0e1116;--card:#171b22;--tx:#e8ebf0;--mu:#9aa3b2;--bd:#2a303a;--up:#3ddc84;--dn:#ff6b60;--nu:#7b8493;color-scheme:dark}}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:640px;margin:0 auto;padding:calc(env(safe-area-inset-top,0px) + 14px) 14px calc(env(safe-area-inset-bottom,0px) + 20px)}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:12px}
+.c{text-align:center}.big{font-size:32px;font-weight:700;margin:2px 0}
+.mu{color:var(--mu);font-size:13px}
+.gauge{position:relative;height:12px;border-radius:6px;margin:16px 4px 6px;background:linear-gradient(90deg,var(--dn),var(--nu) 50%,var(--up))}
+.gauge i{position:absolute;top:-4px;width:6px;height:20px;border-radius:3px;background:var(--tx);transform:translateX(-50%)}
+.sc{display:flex;justify-content:space-between;color:var(--mu);font-size:11px}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.mini{border:1px solid var(--bd);border-radius:10px;padding:8px;text-align:center}.mini b{display:block;font-size:20px}
+.row{display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding:9px 0;border-top:1px solid var(--bd)}
+.row:first-child{border-top:0}.row b{font-size:15px}.row .s{font-weight:700;font-size:16px;text-align:right}
+h2{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--mu);margin:0 0 4px}
+.up{color:var(--up)}.dn{color:var(--dn)}.nu{color:var(--nu)}
+button{background:var(--card);color:var(--tx);border:1px solid var(--bd);border-radius:10px;padding:10px 14px;font:inherit;width:100%}
+</style>
+</head>
+<body><main>
+<div class="card c">
+  <div class="mu">NQ futures · bias i dag</div>
+  <div id="vt" class="big nu">Laster …</div>
+  <div id="vs" class="mu"></div>
+  <div class="gauge"><i id="mk" style="left:50%"></i></div>
+  <div class="sc"><span>Bearish</span><span>Nøytral</span><span>Bullish</span></div>
+  <div class="split"><div class="mini"><span class="mu">Makro</span><b id="ms">–</b></div><div class="mini"><span class="mu">Mikro</span><b id="is">–</b></div></div>
+  <p id="tr" class="mu"></p><p id="cf" class="dn mu"></p>
+</div>
+<div class="card"><h2>Makro</h2><div id="g1"></div></div>
+<div class="card"><h2>Mikro</h2><div id="g2"></div></div>
+<button id="rf">Oppdater</button>
+<p class="mu" style="text-align:center;margin-top:12px">Regelbasert vurdering, ikke finansiell rådgivning.</p>
+</main>
+<script>
+const $=id=>document.getElementById(id),cls=v=>v>0?'up':v<0?'dn':'nu',sg=v=>(v>0?'+':'')+v;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function age(ts){const h=(Date.now()-new Date(ts))/36e5;return h<1?'under 1 t siden':h<48?Math.round(h)+' t siden':Math.round(h/24)+' d siden'}
+function draw(d){
+  $('vt').textContent=d.verdict;$('vt').className='big '+cls(d.total);
+  $('vs').textContent='Score '+sg(d.total)+' / ±100 · oppdatert '+d.updated+' NY ('+age(d.ts)+')';
+  $('mk').style.left=((d.total+100)/2)+'%';
+  [['ms',d.macro],['is',d.micro]].forEach(([i,x])=>{$(i).textContent=sg(x);$(i).className=cls(x)});
+  $('tr').textContent=d.trend;$('cf').textContent=d.conflict||'';
+  ['Makro','Mikro'].forEach((g,k)=>{$('g'+(k+1)).innerHTML=d.rows.filter(r=>r.g===g).map(r=>
+    '<div class="row"><b>'+esc(r.n)+'</b><span class="s '+cls(r.s)+'">'+sg(r.s)+'</span><span class="mu">'+esc(r.d)+'</span><span class="mu" style="text-align:right">v'+r.w+'</span></div>').join('')});
+}
+async function load(){
+  try{draw(await (await fetch('data.json?'+Date.now(),{cache:'no-store'})).json())}
+  catch(e){$('vt').textContent='Ingen data';$('vs').textContent='Kjør GitHub Action én gang, eller sjekk nett.'}
+}
+$('rf').onclick=load;load();
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)load()});
+</script>
+</body></html>
